@@ -165,6 +165,11 @@ dashboard-app/
 
 2. **Configurez les variables d'environnement** dans Vercel Dashboard
 
+## 🎥 Demo vidéo
+
+
+
+
 ## 👤 Auteur
 
 SAKHR Niama
