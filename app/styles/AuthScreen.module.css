@@ -1,0 +1,100 @@
+.authContainer {
+  display: flex;
+  min-height: 100vh;
+}
+
+.leftPanel {
+  flex: 1;
+  background: linear-gradient(135deg, #2c3e50 0%, #293f56 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: white;
+  text-align: center;
+}
+
+.welcomeTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.welcomeSubtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+.rightPanel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+/* Styles pour Clerk sans container */
+.clerkRoot {
+  width: 100%;
+  max-width: 400px;
+}
+
+.clerkCard {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.authSwitch {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+  color: #4a5568;
+  text-align: center;
+}
+
+.switchButton {
+  background: none;
+  border: none;
+  color: #c13434;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  margin-left: 4px;
+  text-decoration: none;
+}
+
+.switchButton:hover {
+  color: #2c5aa0;
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .authContainer {
+    flex-direction: column;
+  }
+  
+  .leftPanel {
+    padding: 60px 24px;
+    flex: none;
+    min-height: 40vh;
+  }
+  
+  .rightPanel {
+    padding: 40px 24px;
+    flex: none;
+  }
+  
+  .welcomeTitle {
+    font-size: 2rem;
+  }
+  
+  .welcomeSubtitle {
+    font-size: 1.1rem;
+  }
+}

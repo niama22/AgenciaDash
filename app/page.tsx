@@ -1,65 +1,187 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import Sidebar from "./components/Sidebar";
+import DashboardView from "./components/DashboardView";
+import AgenciesView from "./components/AgenciesView";
+import ContactsView from "./components/ContactsView";
+import AuthScreen from "./components/AuthScreen";
+
+export type Agency = {
+  name?: string;
+  state?: string;
+  state_code?: string;
+  type?: string;
+  population?: string;
+  website?: string;
+  county?: string;
+};
+
+export type Contact = {
+  first_name?: string;
+  last_name?: string;
+  title?: string;
+  email?: string;
+  phone?: string;
+  department?: string;
+  email_type?: string;
+};
+
+export const ITEMS_PER_PAGE = 10;
+export const DAILY_LIMIT = 50;
+
+export default function Dashboard() {
+  const { user } = useUser(); // ✅ Récupérer l'utilisateur Clerk
+  
+  const [currentView, setCurrentView] = useState<"dashboard" | "agencies" | "contacts">("dashboard");
+  const [agenciesCount, setAgenciesCount] = useState(0);
+  const [contactsCount, setContactsCount] = useState(0);
+
+  const [agencies, setAgencies] = useState<Agency[]>([]);
+  const [agencySearch, setAgencySearch] = useState("");
+  const [agencyPage, setAgencyPage] = useState(1);
+
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [contactSearch, setContactSearch] = useState("");
+  const [contactPage, setContactPage] = useState(1);
+  const [limitReached, setLimitReached] = useState(false);
+  const [limitCount, setLimitCount] = useState(0);
+
+  useEffect(() => {
+    fetch("/data/agencies.csv")
+      .then((res) => res.text())
+      .then((text) => {
+        const lines = text.split('\n');
+        const headers = lines[0].split(',');
+        const data = lines.slice(1).filter(line => line.trim()).map(line => {
+          const values = line.split(',');
+          return {
+            name: values[0] || "__",
+            state: values[1] || "__",
+            state_code: values[2] || "__",
+            type: values[3] || "__",
+            population: values[4] || "__",
+            website: values[5] || "__",
+            county: values[6] || "__",
+          };
+        });
+        setAgencies(data);
+        setAgenciesCount(data.length);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!user) return; // ✅ Attendre que l'utilisateur soit chargé
+
+    const today = new Date().toDateString();
+    const dateKey = `contactsDate-${user.id}`; // ✅ Clé unique par utilisateur
+    const countKey = `contactsCount-${user.id}`; // ✅ Clé unique par utilisateur
+    
+    const storedDate = localStorage.getItem(dateKey);
+    const storedCount = Number(localStorage.getItem(countKey)) || 0;
+
+    if (storedDate !== today) {
+      localStorage.setItem(dateKey, today);
+      localStorage.setItem(countKey, "0");
+      setLimitReached(false);
+      setLimitCount(0);
+    } else {
+      setLimitCount(storedCount);
+      if (storedCount >= DAILY_LIMIT) {
+        setLimitReached(true);
+        return;
+      }
+    }
+
+    fetch("/data/contacts.csv")
+      .then((res) => res.text())
+      .then((text) => {
+        const lines = text.split('\n');
+        const data = lines.slice(1).filter(line => line.trim()).map(line => {
+          const values = line.split(',');
+          return {
+            first_name: values[0] || "__",
+            last_name: values[1] || "__",
+            title: values[2] || "__",
+            email: values[3] || "__",
+            phone: values[4] || "__",
+            department: values[5] || "__",
+            email_type: values[6] || "__",
+          };
+        });
+
+        const remaining = DAILY_LIMIT - storedCount;
+        const shuffled = data.sort(() => 0.5 - Math.random());
+        const limited = shuffled.slice(0, remaining);
+
+        setContacts(limited);
+        setContactsCount(limited.length);
+
+        const newCount = storedCount + limited.length;
+        localStorage.setItem(countKey, newCount.toString());
+        setLimitCount(newCount);
+
+        if (newCount >= DAILY_LIMIT) {
+          setLimitReached(true);
+        }
+      });
+  }, [user]); // ✅ Recharger quand l'utilisateur change
+
+  useEffect(() => { setAgencyPage(1); }, [agencySearch]);
+  useEffect(() => { setContactPage(1); }, [contactSearch]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div style={styles.containerMain}>
+      <SignedIn>
+        <Sidebar 
+          currentView={currentView} 
+          setCurrentView={setCurrentView} 
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+      </SignedIn>
+
+      <main style={styles.mainContent}>
+        <SignedOut>
+          <AuthScreen />
+        </SignedOut>
+
+        <SignedIn>
+          {currentView === "dashboard" && (
+            <DashboardView 
+              agenciesCount={agenciesCount}
+              contactsCount={contactsCount}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          )}
+
+          {currentView === "agencies" && (
+            <AgenciesView
+              agencies={agencies}
+              agencySearch={agencySearch}
+              setAgencySearch={setAgencySearch}
+              agencyPage={agencyPage}
+              setAgencyPage={setAgencyPage}
+            />
+          )}
+
+          {currentView === "contacts" && (
+            <ContactsView
+              contacts={contacts}
+              contactSearch={contactSearch}
+              setContactSearch={setContactSearch}
+              contactPage={contactPage}
+              setContactPage={setContactPage}
+              limitReached={limitReached}
+              limitCount={limitCount}
+              contactsCount={contactsCount}
+            />
+          )}
+        </SignedIn>
       </main>
     </div>
   );
 }
+
+const styles = {
+  containerMain: { display: "flex", height: "100vh", fontFamily: "system-ui, -apple-system, sans-serif" },
+  mainContent: { flex: 1, display: "flex", flexDirection: "column" as const, backgroundColor: "#ecf0f1", overflowY: "auto" as const },
+};

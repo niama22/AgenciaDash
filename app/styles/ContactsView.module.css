@@ -1,0 +1,115 @@
+.contentArea {
+  padding: 32px;
+  flex: 1;
+}
+
+.contentTitle {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 32px;
+}
+
+.pageHeader {
+  margin-bottom: 24px;
+}
+
+.subtitle {
+  color: #7f8c8d;
+  font-size: 16px;
+}
+
+.limitBadge {
+  background-color: #e74c3c;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.tableWrapper {
+  background-color: white;
+  border-radius: 4px;
+  overflow: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableHeader {
+  background-color: #34495e;
+  color: white;
+}
+
+.th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.tableRow {
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.td {
+  padding: 16px;
+  font-size: 14px;
+  color: #2c3e50;
+}
+
+.link {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.noResults {
+  padding: 32px;
+  text-align: center;
+  color: #7f8c8d;
+  font-size: 16px;
+}
+
+.alert {
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  padding: 24px;
+  margin-top: 24px;
+  display: flex;
+  gap: 16px;
+}
+
+.alertIcon {
+  font-size: 24px;
+}
+
+.alertTitle {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.btnUpgrade {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btnUpgrade:hover {
+  background-color: #219a52;
+}
+
+.btnUpgrade:disabled {
+  background-color: #7f8c8d;
+  cursor: not-allowed;
+}
