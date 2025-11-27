@@ -96,28 +96,40 @@ dashboard-app/
 │   │   ├── Sidebar.tsx            # Menu de navigation
 │   │   ├── SearchBar.tsx          # Barre de recherche
 │   │   └── Pagination.tsx         # Composant de pagination
+│   ├── hooks/
+│   │   └── useDailyLimit.ts       # Hook personnalisé pour la limite quotidienne
 │   ├── sign-in/
-│   │   └── page.tsx               # Page de connexion
+│   │   └── [[...sign-in]]/
+│   │       └── page.tsx           # Page de connexion Clerk
 │   ├── sign-up/
-│   │   └── page.tsx               # Page d'inscription
+│   │   └── [[...sign-up]]/
+│   │       └── page.tsx           # Page d'inscription Clerk
 │   ├── styles/
 │   │   ├── AgenciesView.module.css
 │   │   ├── ContactsView.module.css
-│   │   └── AuthScreen.module.css
-│   ├── types.ts                   # Types TypeScript
+│   │   ├── AuthScreen.module.css
+│   │   ├── DashboardView.module.css
+│   │   ├── Pagination.module.css
+│   │   ├── SearchBar.module.css
+│   │   ├── Sidebar.module.css
+│   │   └── globals.css            # Styles globaux
 │   ├── constants.ts               # Constantes de l'app
+│   ├── types.ts                   # Types TypeScript
 │   ├── layout.tsx                 # Layout principal
-│   └── page.tsx                   # Page principale
+│   └── page.tsx                   # Page principale (Dashboard)
 ├── public/
 │   └── data/
 │       ├── agencies.csv           # Données des agences
 │       └── contacts.csv           # Données des contacts
 ├── middleware.ts                  # Middleware Clerk
 ├── .env.local                     # Variables d'environnement
+├── .gitignore
 ├── next.config.js
 ├── package.json
-└── tsconfig.json
-```
+├── postcss.config.mjs
+├── tailwind.config.js
+├── tsconfig.json
+...
 
 ## 🎯 Utilisation
 
@@ -156,8 +168,6 @@ dashboard-app/
 ## 👤 Auteur
 
 SAKHR Niama
-
-Lien du projet: [https://github.com/votre-username/dashboard-app](https://github.com/votre-username/dashboard-app)
 
 ## 🙏 Remerciements
 
