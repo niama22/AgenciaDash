@@ -168,9 +168,3 @@ dashboard-app/
 ## 👤 Auteur
 
 SAKHR Niama
-
-## 🙏 Remerciements
-
-- [Next.js](https://nextjs.org/)
-- [Clerk](https://clerk.com/)
-- [Vercel](https://vercel.com/)
