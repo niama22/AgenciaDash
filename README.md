@@ -129,7 +129,7 @@ dashboard-app/
 ├── postcss.config.mjs
 ├── tailwind.config.js
 ├── tsconfig.json
-...
+```
 
 ## 🎯 Utilisation
 
